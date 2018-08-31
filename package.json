@@ -1,0 +1,17 @@
+{
+  "name": "game-project",
+  "author": {
+    "name": "Or'el Ben-Ya'ir",
+    "email": "orelbenyair@gmail.com"
+  },
+  "homepage": "https://github.com/OrelBey/game-project#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OrelBeY/game-project.git"
+  },
+  "private": false,
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@aspnet/signalr": "^1.0.3"
+  }
+}

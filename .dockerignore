@@ -1,0 +1,4 @@
+bin\
+obj\
+ClientApp\dist\
+ClientApp\node_modules\

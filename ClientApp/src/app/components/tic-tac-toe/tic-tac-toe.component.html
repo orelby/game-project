@@ -1,0 +1,119 @@
+<h1>Tic Tac Toe</h1>
+
+<div *ngIf="!status.hasGameStarted && status.gameType === null">
+  <div *ngIf="!needsToChooseAiOptions">
+    <h2>Choose game mode</h2>
+    <div class="btn-group btn-group-vertical" role="group">
+      <button type="button" (click)="startPvPGame()" class="btn btn-primary btn-lg btn-block"><i class="fas fa-users"></i>
+        <span>Player vs. Player</span></button>
+      <button type="button" (click)="needsToChooseAiOptions = true" class="btn btn-primary btn-lg btn-block"><i class="fas fa-desktop"></i>
+        <span>Player vs. AI</span></button>
+    </div>
+  </div>
+
+  <div *ngIf="needsToChooseAiOptions" id="gameOptionMenu">
+    <h2>Choose AI Game Options</h2>
+    <fieldset>
+      <legend>Difficulty</legend>
+      <div class="btn-group btn-group-toggle btn-group-vertical" ngbRadioGroup name="ai_difficulty" [(ngModel)]="aiDifficulty">
+        <label ngbButtonLabel class="btn-secondary btn-lg">
+          <input ngbButton type="radio" [value]="aiDifficulties.Low"><i class="fas fa-battery-quarter"></i><span>Low</span>
+        </label>
+        <label ngbButtonLabel class="btn-secondary btn-lg">
+          <input ngbButton type="radio" [value]="aiDifficulties.High"><i class="fas fa-battery-half"></i><span>High</span>
+        </label>
+        <label ngbButtonLabel class="btn-secondary btn-lg">
+          <input ngbButton type="radio" [value]="aiDifficulties.Impossible"><i class="fas fa-battery-full"></i><span>Impossible</span>
+        </label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>First turn</legend>
+      <div class="btn-group btn-group-toggle btn-group-vertical" ngbRadioGroup name="ai_first_turn" [(ngModel)]="aiFirstTurn">
+        <label ngbButtonLabel class="btn-secondary btn-lg">
+          <input ngbButton type="radio" [value]="1"><i class="fas fa-user"></i><span>I'll start</span>
+        </label>
+        <label ngbButtonLabel class="btn-secondary btn-lg">
+          <input ngbButton type="radio" [value]="0"><i class="fas fa-dice"></i><span>Doesn't matter</span>
+        </label>
+        <label ngbButtonLabel class="btn-secondary btn-lg">
+          <input ngbButton type="radio" [value]="-1"><i class="fas fa-desktop"></i><span>You start</span>
+        </label>
+      </div>
+    </fieldset>
+    <button type="button" (click)="startAiGame(aiDifficulty, aiFirstTurn)" class="btn btn-primary btn-lg">Play</button>
+  </div>
+
+</div>
+
+<div *ngIf="!status.hasGameStarted && status.gameType !== null">
+  <p *ngIf="status.gameType === gameTypes.PvP"><i class="fa fa-spinner fa-spin"></i> Looking for an opponent...</p>
+  <p *ngIf="status.gameType !== gameTypes.PvP"><i class="fa fa-spinner fa-spin"></i> Starting game...</p>
+</div>
+
+<div *ngIf="status.hasGameStarted">
+  <div *ngIf="!status.hasOpponentLeft || status.gameResult !== null">
+    <div class="board" [ngClass]="{'waiting-for-player': status.isWaitingForPlayer}">
+      <div class="board-row board-row-1">
+        <div [ngClass]="board.getCellOwner(0) === null ? '' : ( board.getCellOwner(0) === player ? 'cell-of-player' : 'cell-of-opponent')"
+          (click)="makeMove(0)" class="board-cell board-cell-1"></div>
+        <div [ngClass]="board.getCellOwner(1) === null ? '' : ( board.getCellOwner(1) === player ? 'cell-of-player' : 'cell-of-opponent')"
+          (click)="makeMove(1)" class="board-cell board-cell-2"></div>
+        <div [ngClass]="board.getCellOwner(2) === null ? '' : ( board.getCellOwner(2) === player ? 'cell-of-player' : 'cell-of-opponent')"
+          (click)="makeMove(2)" class="board-cell board-cell-3"></div>
+      </div>
+      <div class="board-row board-row-2">
+        <div [ngClass]="board.getCellOwner(3) === null ? '' : ( board.getCellOwner(3) === player ? 'cell-of-player' : 'cell-of-opponent')"
+          (click)="makeMove(3)" class="board-cell board-cell-1"></div>
+        <div [ngClass]="board.getCellOwner(4) === null ? '' : ( board.getCellOwner(4) === player ? 'cell-of-player' : 'cell-of-opponent')"
+          (click)="makeMove(4)" class="board-cell board-cell-2"></div>
+        <div [ngClass]="board.getCellOwner(5) === null ? '' : ( board.getCellOwner(5) === player ? 'cell-of-player' : 'cell-of-opponent')"
+          (click)="makeMove(5)" class="board-cell board-cell-3"></div>
+      </div>
+      <div class="board-row board-row-3">
+        <div [ngClass]="board.getCellOwner(6) === null ? '' : ( board.getCellOwner(6) === player ? 'cell-of-player' : 'cell-of-opponent')"
+          (click)="makeMove(6)" class="board-cell board-cell-1"></div>
+        <div [ngClass]="board.getCellOwner(7) === null ? '' : ( board.getCellOwner(7) === player ? 'cell-of-player' : 'cell-of-opponent')"
+          (click)="makeMove(7)" class="board-cell board-cell-2"></div>
+        <div [ngClass]="board.getCellOwner(8) === null ? '' : ( board.getCellOwner(8) === player ? 'cell-of-player' : 'cell-of-opponent')"
+          (click)="makeMove(8)" class="board-cell board-cell-3"></div>
+      </div>
+    </div>
+
+    <p *ngIf="status.isSendingMove"><i class="fa fa-spinner fa-spin"></i> Sending move...</p>
+    <p *ngIf="status.isWaitingForOpponent"><i class="fa fa-spinner fa-spin"></i> Waiting for the opponent to make a move...</p>
+    <p *ngIf="status.isWaitingForPlayer">It's your turn.</p>
+  </div>
+
+  <div *ngIf="status.gameResult !== null">
+    <div *ngIf="status.gameResult > 0">
+      <p><i class="fas fa-trophy" style="font-size: 3em;"></i></p>
+      <p>You won!</p>
+    </div>
+    <div *ngIf="status.gameResult === 0">
+      <p><i class="fas fa-balance-scale" style="font-size: 3em;"></i></p>
+      <p>It's a tie!</p>
+    </div>
+    <div *ngIf="status.gameResult < 0">
+      <p><span class="fa-stack fa-2x" style="font-size: 2em;">
+          <i class="fas fa-certificate fa-stack-2x"></i>
+          <i class="fas fa-trash fa-stack-1x fa-inverse"></i>
+        </span></p>
+      <p>You lost!</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="status.hasGameStarted && (status.hasOpponentLeft || status.gameResult !== null)">
+  <div *ngIf="status.hasOpponentLeft && status.gameResult === null">
+    <p><i class="fas fa-poo" style="color: #804c27; font-size: 5em;"></i></p>
+    <p>Unfortunately, the opponent has left the match...</p>
+  </div>
+  <div class="btn-group btn-group-vertical" role="group">
+    <button type="button" (click)="restartGame()" class="btn btn-primary btn-lg btn-block"><i class="fas fa-redo pull-left"></i><span>Another
+        game
+      </span></button>
+    <button type="button" (click)="status.reset()" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-chevron-left"></i><span>Back
+        to game menu</span></button>
+  </div>
+</div>

@@ -1,0 +1,191 @@
+@import "~src/sass/variables";
+@import "~src/sass/mixins";
+
+:host {
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.2em;
+}
+
+h2 {
+    font-size: 1.75em;
+    margin-bottom: 1em;
+}
+
+p {
+    font-size: 1.3em;
+}
+
+.board {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: stretch;
+    max-height: 500px;
+    max-width: 500px;
+    margin: 2em auto;
+}
+
+.board-cell {
+    position: relative;
+}
+
+.board-cell::before {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: 100%;
+  }
+
+.board-row {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: center;
+}
+
+.board-row + .board-row {
+    margin-top: 1em;
+}
+
+.board-cell + .board-cell {
+    margin-left: 1em;
+}
+
+
+.board-cell {
+    flex: 1 0 auto;
+
+    border: 1px solid #b0b0b0;
+    border-radius: 10px;
+
+    cursor: auto;
+    pointer-events: none;
+
+    transition: background-color 0.3s ease;
+}
+
+%cell-of-someone {
+    animation: blink 0.4s ease;
+}
+
+%cell-of-someone-icon {
+    font-size: 3.5em;
+    color: white;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cell-of-player {
+    @extend %cell-of-someone;
+    @extend .fas;
+
+    &::after {
+        @extend %cell-of-someone-icon;
+        content: fa-content($fa-var-times);
+        color: #7dc882;
+    }
+}
+
+.cell-of-opponent {
+    @extend %cell-of-someone;
+    @extend .fas;
+
+    &::after {
+        @extend %cell-of-someone-icon;
+        content: fa-content($fa-var-circle);
+        color: #c87d7d;  
+    }
+}
+
+.waiting-for-player .board-cell:not(.cell-of-player):not(.cell-of-opponent) {
+    cursor: pointer;
+    pointer-events: auto;
+    
+    &:hover,
+    &:focus {
+        opacity: 0.7;
+
+        &::after {
+            @extend %cell-of-someone-icon;
+            @extend .fas;
+            content: fa-content($fa-var-times);
+            color: #7dc882;
+        }
+    }
+        
+    &:active {
+        transition: all 0.2s ease-in-out;
+        transform: scale(0.95);
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.btn-group {
+    width: 95%;
+
+    button {
+        margin-bottom: 0.65em;
+    }
+}
+
+fieldset {
+    margin-bottom: 2em;
+}
+
+.btn-group-equal-width .btn {
+    flex: 1 1 0;
+}
+
+@media (min-width: 768px) {
+    .btn-group {
+        width: 50%;
+    }
+
+    %cell-of-someone-icon {
+        font-size: 5em;
+    }
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn > .fas {
+    text-align: center;
+    flex: 1 1 0;
+}
+
+.btn > span {
+    flex: 9 9 0;
+}
+
+button.btn > span {
+    margin-left: -11%;
+}
+
+label.btn > span {
+    text-align: left;
+    margin-left: 1em;
+}
