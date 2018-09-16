@@ -13,18 +13,14 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
-  <Target Name="Clean Build Directory" BeforeTargets="Build">   
-      <Message Text="Cleaning build directory..." Importance="high" /> 
-    <RemoveDir Directories="$(builtdir)" />
+  <Target Name="Clean Output Directory" BeforeTargets="BeforeCompile">   
+    <Message Text="Cleaning output directory..." Importance="high" /> 
+    <RemoveDir Directories="$(OutDir)" />
+    <MakeDir Directories="$(OutDir)" />
   </Target>
 
-  <Target Name="Warn About Not Building Angular" Condition="'$(Configuration)'!='Release'" AfterTargets="Build">    
-    <Warning Text="* * * * * * To build Angular App you need to use ng serve or ng build manually * * * * * *" />
-  </Target>
-
-  <Target Name="Build Angular" Condition="'$(Configuration)'=='Release'" BeforeTargets="Build">    
-    <Message Text="* * * * * * Building Angular App * * * * * *" Importance="high" />
-    <Exec WorkingDirectory="./ClientApp" Command="./node_modules/.bin/ng build --prod --aot" />
+  <Target Name="Remind To Build Angular" AfterTargets="Build">    
+    <Warning Text="* * * * * * You need to build the Angular App manually * * * * * *" />
   </Target>
 
 </Project>
