@@ -1,10 +1,11 @@
 {
   "name": "game-project",
+  "description": "Web-based Tic Tac Toe (PvP & AI) built using .NET/C#, SignalR and Angular",
   "author": {
     "name": "Or'el Ben-Ya'ir",
     "email": "orelbenyair@gmail.com"
   },
-  "homepage": "https://github.com/OrelBey/game-project#readme",
+  "homepage": "https://game-project-demo.herokuapp.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/OrelBeY/game-project.git"
